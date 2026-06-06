@@ -18,7 +18,7 @@ def multiply(a, b):
     
     print(f"Multiplying {a} × {b}")  # Added logging
     result = a * b
-    print(f"Result: {result}")
+    print(f"Result: {result}")  # Logging result
     return result
 
 def divide(a, b):
@@ -30,7 +30,7 @@ def divide(a, b):
     
     print(f"Dividing {a} ÷ {b}")  # Added logging
     result = a / b
-    print(f"Result: {result}")
+    print(f"Result: {result}")  # Logging Result
     return result
 
 # TODO: Students will add multiply, divide, power, sqrt functions
