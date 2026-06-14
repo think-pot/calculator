@@ -1,8 +1,0 @@
-[run]
-branch = True
-source = src
-parallel = True
-concurrency = subprocess
-
-[report]
-show_missing = True
