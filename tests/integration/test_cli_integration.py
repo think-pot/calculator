@@ -1,49 +1,47 @@
-""" 
-Integration Tests - CLI + Calculator Working Together 
-"""
-
-import subprocess
-import sys
 import pytest
+from click.testing import CliRunner
+from src.cli import calculate
 
 
 class TestCLIIntegration:
-    """Test CLI application integrating with calculator module"""
-
-    def run_cli(self, *args):
-        """Helper method to run CLI and capture output"""
-        cmd = [sys.executable, "src/cli.py"] + list(args)
-        result = subprocess.run(cmd, capture_output=True, text=True, cwd=".")
-        return result
+    def setup_method(self):
+        self.runner = CliRunner()
 
     def test_cli_add_integration(self):
-        """Test CLI can perform addition"""
-        result = self.run_cli("add", "5", "3")
-        assert result.returncode == 0
-        assert result.stdout.strip() == "8"
+        result = self.runner.invoke(calculate, ["add", "5", "3"])
+        assert result.exit_code == 0
+        assert result.output.strip() == "8"
 
     def test_cli_subtract_integration(self):
-        """Test CLI can perform subtraction"""
-        result = self.run_cli("subtract", "5", "3")
-        assert result.returncode == 0
-        assert result.stdout.strip() == "2"
+        result = self.runner.invoke(calculate, ["subtract", "5", "3"])
+        assert result.exit_code == 0
+        assert result.output.strip() == "2"
 
     def test_cli_subtract_missing_operand_error(self):
-        """Test CLI handles missing operand for subtraction gracefully"""
-        # call subtract with only one operand; CLI should exit with non-zero and print an error
-        result = self.run_cli("subtract", "5")
-        assert result.returncode == 1
-        # CLI prints a generic unexpected error message for this case
-        assert result.stdout.strip().startswith("Unexpected error:")
+        result = self.runner.invoke(calculate, ["subtract", "5"])
+        assert result.exit_code != 0
+        assert "Error:" in result.output
 
     def test_cli_multiply_integration(self):
-        """Test CLI can perform multiplication"""
-        result = self.run_cli("multiply", "5", "3")
-        assert result.returncode == 0
-        assert result.stdout.strip() == "15"
+        result = self.runner.invoke(calculate, ["multiply", "5", "3"])
+        assert result.exit_code == 0
+        assert result.output.strip() == "15"
 
     def test_cli_divide_integration(self):
-        """Test CLI can perform division"""
-        result = self.run_cli("divide", "5", "3")
-        assert result.returncode == 0
-        assert result.stdout.strip() == "1.67"
+        result = self.runner.invoke(calculate, ["divide", "5", "3"])
+        assert result.exit_code == 0
+        assert result.output.strip() == "1.67"
+
+
+class TestCLIErrorCases:
+    def setup_method(self):
+        self.runner = CliRunner()
+
+    def test_cli_unknown_operation(self):
+        result = self.runner.invoke(calculate, ["foobar", "5", "3"])
+        assert result.exit_code == 1
+        assert "Unknown operation" in result.output
+
+    def test_cli_square_root_negative(self):
+        result = self.runner.invoke(calculate, ["square_root", "-9"])
+        assert result.exit_code == 2
