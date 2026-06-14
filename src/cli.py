@@ -1,3 +1,8 @@
+"""
+CLI interface for the calculator module using Click.
+Provides operations: add, subtract, multiply, divide, power, square_root.
+"""
+
 import sys
 import click
 from src.calculator import add, subtract, multiply, divide, power, square_root
@@ -7,9 +12,8 @@ from src.calculator import add, subtract, multiply, divide, power, square_root
 @click.argument("operation")
 @click.argument("num1", type=float)
 @click.argument("num2", type=float, required=False)
-def calculate(operation, num1, num2=None):
-    """Simple calculator CLI"""
-
+def calculate(operation: str, num1: float, num2: float = None) -> None:
+    """Perform a calculation based on the given operation and numbers."""
     try:
         if operation == "add":
             result = add(num1, num2)
@@ -27,23 +31,19 @@ def calculate(operation, num1, num2=None):
             click.echo(f"Unknown operation: {operation}")
             sys.exit(1)
 
-        # Format result nicely
         if result == int(result):
             click.echo(int(result))
         else:
             click.echo(f"{result:.2f}")
 
-    except ValueError as e:
-        click.echo(f"Error: {e}")
-        sys.exit(1)
-    except Exception as e:
-        click.echo(f"Unexpected error: {e}")
+    except (TypeError, ValueError) as err:
+        click.echo(f"Error: {err}")
         sys.exit(1)
 
 
-def main():
-    """Entry point for CLI"""
-    calculate()
+def main() -> None:
+    """Entry point for CLI."""
+    calculate.main(standalone_mode=True)
 
 
 if __name__ == "__main__":

@@ -31,8 +31,6 @@ def divide(a, b):
     result = a / b
     return result
 
-
-# TODO: Students will add multiply, divide, power, sqrt functions
 def power(a, b):
     """Raise a to the power of b"""
     return a**b

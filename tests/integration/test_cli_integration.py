@@ -20,7 +20,7 @@ class TestCLIIntegration:
     def test_cli_subtract_missing_operand_error(self):
         result = self.runner.invoke(calculate, ["subtract", "5"])
         assert result.exit_code != 0
-        assert "Unexpected error:" in result.output
+        assert "Error:" in result.output
 
     def test_cli_multiply_integration(self):
         result = self.runner.invoke(calculate, ["multiply", "5", "3"])
