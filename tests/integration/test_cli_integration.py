@@ -42,7 +42,7 @@ class TestCLIIntegration:
         """Test CLI properly handles calculator errors"""
         result = self.run_cli('divide', '10', '0')
         assert result.returncode == 1
-        assert 'Cannot divide by zero' in result.stdout
+        assert 'division by zero is undefined' in result.stdout
 
     def test_cli_invalid_operation_integration(self):
         """Test CLI handles invalid operations"""
